@@ -25,15 +25,19 @@ app.get("/api/hello", function (req, res) {
 });
 
 
-app.get('/api/timestamp/:date', function (req, res) {
+app.get('/api/timestamp/:date_string', function (req, res) {
+
   let date;
-  let text;
-  if (!req.params.date) date = new Date();
-  else date = new Date(req.params.date);
-  if (!date) text = '{"error":"Invalid Date"}';
-  else text = '{"unix":"' + date.getTime() +
-              '","utc":"' + date.toUTCString() + '"}';
-  res.send(text);
+  if (!req.params.date_string) date = new Date();
+  else date = new Date(req.params.date_string);
+
+  const message = {
+    unix: date.getTime(),
+    utc: date.toUTCString()
+  };
+
+  if (message.unix == 'NaN') message.unix = null;
+  res.json(message);
 });
 
 
